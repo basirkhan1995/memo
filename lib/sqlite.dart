@@ -8,7 +8,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper{
 
-  final databaseName = "lady2.db";
+  final databaseName = "note.db";
 
   String userTable = "create table users (usrId integer primary key autoincrement, usrName Text, usrPassword Text)";
   String userData = "insert into users (usrId, usrName, usrPassword) values(1,'admin','123456')";
