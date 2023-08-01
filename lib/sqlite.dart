@@ -87,13 +87,6 @@ class DatabaseHelper{
     final count = Sqflite.firstIntValue(await db.rawQuery("select count(*) from users"));
     return count;
   }
-  //Total users count
-  Future <int?> totalUsers() async {
-    final Database db = await initDB();
-    final count = Sqflite.firstIntValue(await db.rawQuery("select count(*) from users"));
-    return count;
-  }
-
   */
   //Persons --------------------------------------------------------------------
 
