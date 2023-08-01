@@ -34,60 +34,7 @@ class DatabaseHelper{
     });
   }
 
-  /*
-  //Authentication Method for login
-  Future <bool> authentication(Users users)async{
-    final Database db = await initDB();
-    var result = await db.rawQuery("select * from users where usrName = '${users.usrName}' and usrPassword = '${users.usrPassword}' ");
-    if(result.isNotEmpty){
 
-      return true;
-    }else{
-      return false;
-    }
-  }
-
-  //Method for creating an account
-  Future <int> createUsers(Users users) async {
-    final Database db = await initDB();
-    return db.insert('users', users.toMap());
-  }
-
-  //Method to show users
-  Future <List<Users>> getUsers () async{
-    final Database db = await initDB();
-    final List<Map<String, Object?>>  queryResult = await db.query('users',orderBy: 'usrId');
-    return queryResult.map((e) => Users.fromMap(e)).toList();
-  }
-
-
-
-  // Delete a user
-  Future<void> deleteUser(String id) async {
-    final db = await initDB();
-    try {
-      await db.delete("users", where: "usrId = ?", whereArgs: [id]);
-    } catch (err) {
-      if (kDebugMode){
-        print("deleting failed: $err");
-      }
-    }
-  }
-
-  //Update user
-  Future <int> updateUser(Users users)async{
-    final Database db = await initDB();
-    var result = await db.update('users', users.toMap(), where: 'usrId = ?', whereArgs: [users.usrId]);
-    return result;
-  }
-
-  //Total users count
-  Future <int?> totalUsers() async {
-    final Database db = await initDB();
-    final count = Sqflite.firstIntValue(await db.rawQuery("select count(*) from users"));
-    return count;
-  }
-  */
   //Persons --------------------------------------------------------------------
 
   //Create a new person
