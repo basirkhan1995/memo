@@ -5,7 +5,7 @@ import 'package:memoapp/Screens/Transactions/create_transaction.dart';
 import 'package:memoapp/Screens/Transactions/transaction_details.dart';
 import 'package:memoapp/Screens/Transactions/trn_model.dart';
 
-import '../sqlite.dart';
+import '../../sqlite.dart';
 
 
 class Transactions extends StatefulWidget {

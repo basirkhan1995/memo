@@ -37,6 +37,7 @@
   "task": "Tasks",
   "debt": "Debt",
   "amount": "Amount",
-  "description": "",
-  "": "Description"
+  "description": "Description",
+  "": "Description",
+  "date": "Last time updated"
 }

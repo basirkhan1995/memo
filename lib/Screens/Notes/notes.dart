@@ -249,10 +249,33 @@ class _AllNotesState extends State<AllNotes> {
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            items[index].noteTitle,
-                                            style: const TextStyle(
-                                                color: Colors.white, fontSize: 22),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                items[index].noteTitle,
+                                                style: const TextStyle(
+                                                    color: Colors.white, fontSize: 15,fontWeight: FontWeight.bold),
+                                              ),
+                                              Expanded(
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                  children: [
+                                                    Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(4),
+                                                        color: Colors.white
+                                                      ),
+                                                      padding: const EdgeInsets.symmetric(horizontal: 4,vertical: 4),
+                                                      child: LocaleText(
+                                                        items[index].category!,
+                                                        style: const TextStyle(
+                                                            color: Colors.deepPurple, fontSize: 12),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                           Flexible(
                                               child: Container(

@@ -55,30 +55,11 @@ class _TasksState extends State<Tasks> {
       appBar: AppBar(
         title: const LocaleText("task"),
       ),
-      body: GridView.builder(
-          itemCount: items.length,
-          itemBuilder: (context,index){
-        return Container(
-          margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            color: Colors.deepPurple.withOpacity(.1)
-          ),
-          child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              LocaleText(items[index],style: const TextStyle(fontSize: 15),),
-              //Text(totalWorks.toString())
-
-            ],
-          )),
-        );
-      },
-    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-    crossAxisCount: 2,
-    childAspectRatio: (5 / 3),
-      ))
+      body: const Scaffold(
+        body: Center(
+          child: Text("Comming soon..."),
+        ),
+      )
     );
   }
 }

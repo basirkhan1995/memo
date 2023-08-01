@@ -44,7 +44,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       image: AssetImage("assets/Photos/todo_bg.jpg")
                     )
                   ),
-                  child: Text("Lady Teen"),
+                  child: Text("Memo"),
                     ),
               ),
             ),
