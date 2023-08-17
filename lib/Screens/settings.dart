@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
+import 'package:memoapp/Screens/theme_view.dart';
+import 'package:provider/provider.dart';
+
+import '../Provider/provider.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Provider.of<MyProvider>(context, listen: false);
     return Scaffold(
+      backgroundColor: controller.darkLight? Colors.grey.withOpacity(.4):Colors.white,
       appBar: AppBar(
-        title: const LocaleText("settings"),
+        elevation: 0,
+        backgroundColor: controller.darkLight? Colors.black12:Colors.deepPurple.withOpacity(.7),
+        title: const LocaleText("settings",style: TextStyle(color: Colors.white),),
       ),
       body: SafeArea(
         child: Padding(
@@ -21,11 +29,11 @@ class Settings extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.deepPurple.withOpacity(.6),
-                      boxShadow: const [
+                      color: controller.darkLight?Colors.black45 : Colors.deepPurple.withOpacity(.6),
+                      boxShadow: [
                         BoxShadow(
                             blurRadius: 1,
-                            color: Colors.grey
+                            color: controller.darkLight?Colors.black45 :Colors.grey
                         )
                       ]
                   ),
@@ -88,15 +96,18 @@ class Settings extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.deepPurple.withOpacity(.6),
-                      boxShadow: const [
+                      color: controller.darkLight ? Colors.black45 : Colors.deepPurple.withOpacity(.6),
+                      boxShadow: [
                         BoxShadow(
                             blurRadius: 1,
-                            color: Colors.grey
+                            color: controller.darkLight?Colors.black45 :Colors.grey
                         )
                       ]
                   ),
                   child: ListTile(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const ChangeThemes()));
+                    },
                       leading: const Icon(Icons.color_lens,size: 30,color: Colors.white,),
                       title: const LocaleText("themes",style: TextStyle(fontSize: 15,color: Colors.white),),
                       subtitle: const LocaleText("themesdetails",style: TextStyle(color: Colors.white)),
@@ -124,11 +135,11 @@ class Settings extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 0),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
-                      color: Colors.deepPurple.withOpacity(.6),
-                      boxShadow: const [
+                      color: controller.darkLight? Colors.black45 : Colors.deepPurple.withOpacity(.6),
+                      boxShadow: [
                         BoxShadow(
                             blurRadius: 1,
-                            color: Colors.grey
+                            color: controller.darkLight?Colors.black45 :Colors.grey
                         )
                       ]
                   ),

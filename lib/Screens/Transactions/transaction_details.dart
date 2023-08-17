@@ -19,7 +19,7 @@ class _TransactionDetailsState extends State<TransactionDetails> {
 
       body: Column(
         children: [
-          Text(widget.trnDetails.person!)
+          //Text(widget.trnDetails.person!)
         ],
       ),
     );

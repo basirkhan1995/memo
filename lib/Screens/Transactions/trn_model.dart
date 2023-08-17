@@ -3,7 +3,7 @@ class TransactionModel{
   final int? trnId;
   final String trnCategory;
   final String trnDescription;
-  final String? amount;
+  final int? amount;
   final String? person;
   final String? createdAt;
   TransactionModel({this.trnId, required this.trnCategory, required this.trnDescription, this.amount,this.person,this.createdAt});
@@ -13,7 +13,7 @@ class TransactionModel{
     trnCategory: json ['trnType'],
     trnDescription: json['trnDescription'],
     amount: json['amount'],
-    person: json['pName'],
+    person: json['trnPerson'],
     createdAt: json['trnDate'],
   );
 
@@ -23,7 +23,7 @@ class TransactionModel{
       'trnType': trnCategory,
       'trnDescription':trnDescription,
       'amount':amount,
-      'pName':person,
+      'trnPerson':person,
       'trnDate': DateTime.now().toIso8601String(),
     };
   }

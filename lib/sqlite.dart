@@ -8,13 +8,14 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper{
 
-  final databaseName = "memo.db";
+  final databaseName = "memo55.db";
 
   String userTable = "create table users (usrId integer primary key autoincrement, usrName Text, usrPassword Text)";
   String userData = "insert into users (usrId, usrName, usrPassword) values(1,'admin','123456')";
   String notes = "create table notes (noteId integer primary key autoincrement, noteTitle Text, noteContent Text,noteStatus integer,category TEXT,createdAt TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)";
   String persons = "create table persons (pId INTEGER PRIMARY KEY AUTOINCREMENT, pName TEXT,createdAt TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)";
   String trn = "create table transactions (trnId INTEGER PRIMARY KEY AUTOINCREMENT, trnDescription TEXT, trnType TEXT NOT NULL, trnPerson INTEGER NOT NULL, amount INTEGER NOT NULL, trnDate TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (trnPerson) REFERENCES persons (pId))";
+  String personData = "insert into persons (pId, pName) values(1,'Basir')";
 
   //Future init method to create a database, user table and user default data
   Future <Database> initDB()async{
@@ -29,8 +30,8 @@ class DatabaseHelper{
       await db.rawQuery(userData);
       await db.execute(notes);
       await db.execute(persons);
+      await db.rawQuery(personData);
       await db.execute(trn);
-
     });
   }
 
@@ -41,6 +42,13 @@ class DatabaseHelper{
   Future <int> createPerson(PersonModel person)async{
     final Database db = await initDB();
     return db.insert('persons', person.toMap());
+  }
+
+  //Show Persons
+  Future <List<PersonModel>> getPersonsByID ( filter) async{
+    final Database db = await initDB();
+    final List<Map<String, Object?>>  queryResult = await db.query('persons',orderBy: 'pId',where: 'pName like ?', whereArgs: ["%$filter%"]);
+    return queryResult.map((e) => PersonModel.fromMap(e)).toList();
   }
 
   //Show Persons
@@ -97,7 +105,7 @@ class DatabaseHelper{
   //Show incomplete notes with 1 status
   Future <List<Notes>> getNotes () async{
     final Database db = await initDB();
-    final List<Map<String, Object?>>  queryResult = await db.query('notes',orderBy: 'noteId');
+    final List<Map<String, Object?>>  queryResult = await db.query('notes',orderBy: 'noteId',where: 'noteStatus = 1');
     return queryResult.map((e) => Notes.fromMap(e)).toList();
   }
 
@@ -109,9 +117,9 @@ class DatabaseHelper{
   }
 
   //show pending notes with 0 status
-  Future <List<Notes>> getPendingNotes () async{
+  Future <List<Notes>> getRemovedNotes () async{
     final Database db = await initDB();
-    final List<Map<String, Object?>>  queryResult = await db.query('notes',orderBy: 'noteId',where: 'noteStatus = 1');
+    final List<Map<String, Object?>>  queryResult = await db.query('notes',orderBy: 'noteId',where: 'noteStatus = 0');
     return queryResult.map((e) => Notes.fromMap(e)).toList();
   }
 
@@ -134,6 +142,8 @@ class DatabaseHelper{
     var result = await db.update('notes', note.toMap(), where: 'noteId = ?', whereArgs: [note.noteId]);
     return result;
   }
+
+
 
   //Update note Status to complete
   Future <int> setNoteStatus(int? id)async{

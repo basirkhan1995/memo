@@ -245,7 +245,7 @@ class _TransactionsState extends State<Transactions> {
                                       children: [
                                         ListTile(
                                           title: Text(
-                                            items[index].person??"",
+                                            items[index].person.toString(),
                                             style: const TextStyle(
                                                 color: Colors.white, fontSize: 20),
                                           ),

@@ -39,5 +39,6 @@
   "amount": "Amount",
   "description": "Description",
   "": "Description",
-  "date": "Last time updated"
+  "date": "Last time updated",
+  "select_person": "select person"
 }

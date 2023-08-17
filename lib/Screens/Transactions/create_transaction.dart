@@ -2,8 +2,10 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:intl/intl.dart';
+import 'package:memoapp/Screens/Transactions/person_model.dart';
 import 'package:memoapp/Screens/Transactions/trn_model.dart';
 import 'package:persian_datetime_picker/persian_datetime_picker.dart';
+import 'package:searchfield/searchfield.dart';
 
 import '../../Methods/dropdown.dart';
 import '../../Methods/textfield.dart';
@@ -22,11 +24,30 @@ class _CreateTransactionState extends State<CreateTransaction> {
   final db = DatabaseHelper();
   final trnDescription = TextEditingController();
   final trnAmount = TextEditingController();
+  int selectedPerson = 0;
   var trnTypeValue = 0;
+  late DatabaseHelper handler;
+  late Future<List<PersonModel>> persons;
 
   @override
+  void initState() {
+    super.initState();
+    handler = DatabaseHelper();
+    persons = handler.getPersonsByID(selectedPerson);
+    handler.initDB().whenComplete(() async {
+      setState(() {
+        persons = getList();
+      });
+    });
+  }
 
 
+  //Method to get data from database
+  Future<List<PersonModel>> getList() async {
+    return await handler.getPersons();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final dt = DateTime.now();
 
@@ -104,6 +125,19 @@ class _CreateTransactionState extends State<CreateTransaction> {
                       ),
                     ],
                   ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: DropdownSearch<PersonModel>(
+                      asyncItems: (value) => db.getPersonsByID(value),
+                      itemAsString: (PersonModel u) => u.pName.toString(),
+                      onChanged: (PersonModel? data){
+                        selectedPerson = data!.pId!.toInt();
+                      },
+                      dropdownDecoratorProps: DropDownDecoratorProps(
+                        dropdownSearchDecoration: InputDecoration(labelText: Locales.string(context, "select_person")),
+                      ),
+                    ),
+                  ),
                   UnderlineInputField(
                     hint: "amount",
                     controller: trnAmount,
@@ -133,16 +167,20 @@ class _CreateTransactionState extends State<CreateTransaction> {
                       TextButton(
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
-                              db.createTransaction(TransactionModel(
-                                trnDescription: trnDescription.text,
-                                amount: trnAmount.text,
+                             /*
+                              db.createTransaction(
+                                person: selectedPerson.toString(),
+                                //trnDescription: trnDescription.text,
+                                amount: int.parse(trnAmount.text),
                                 trnCategory: trnTypeValue == 0?"work": trnTypeValue == 1?"payment":trnTypeValue == 2?"received":trnTypeValue==3?"meeting":"other",
-                              ))
+                              )
                                   .whenComplete(() => Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
                                       const MyHomePage())));
+                              */
+                              print("Person ID : ${selectedPerson.toString()}");
                             }
                           },
                           child: const LocaleText("create")),

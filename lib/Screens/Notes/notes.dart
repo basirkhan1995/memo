@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_locales/flutter_locales.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import '../../Provider/provider.dart';
 import '../../sqlite.dart';
 import 'create_note.dart';
 import 'note_details.dart';
@@ -69,8 +71,9 @@ class _AllNotesState extends State<AllNotes> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Provider.of<MyProvider>(context, listen: false);
     return Scaffold(
-
+       backgroundColor: controller.darkLight?Colors.grey.withOpacity(.3):Colors.white,
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context)=>const CreateNote()));
@@ -93,7 +96,7 @@ class _AllNotesState extends State<AllNotes> {
                       margin: const EdgeInsets.symmetric(horizontal: 0,vertical: 7),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: currentFilterIndex==index? Colors.deepPurple.withOpacity(.1):Colors.transparent,
+                        color: currentFilterIndex==index? Colors.deepPurple.withOpacity(.1): Colors.transparent,
                       ),
                       child: TextButton(
                           onPressed: (){
@@ -102,7 +105,7 @@ class _AllNotesState extends State<AllNotes> {
                               notes = db.filterMemo(filterData[currentFilterIndex]);
                             });
                           },
-                          child: LocaleText(filterTitle[index])),
+                          child: LocaleText(filterTitle[index],style: TextStyle(color: controller.darkLight?Colors.white:Colors.deepPurple),)),
                     );
                   }),
             ),
@@ -112,7 +115,7 @@ class _AllNotesState extends State<AllNotes> {
                   margin: const EdgeInsets.symmetric(horizontal: 10,vertical: 8),
                   padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 3),
                   decoration: BoxDecoration(
-                  color: Colors.deepPurple.withOpacity(.1),
+                  color: controller.darkLight?Colors.black12: Colors.deepPurple.withOpacity(.1),
                     borderRadius: BorderRadius.circular(8)
                   ),
                   child: TextFormField(
@@ -203,7 +206,7 @@ class _AllNotesState extends State<AllNotes> {
                                 key: ValueKey<int>(items[index].noteId!),
                                 onDismissed: (DismissDirection direction) async {
                                   await handler
-                                      .deleteNote(items[index].noteId.toString())
+                                      .setNoteStatus(items[index].noteId)
                                       .whenComplete(() => ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
                                               shape: RoundedRectangleBorder(
@@ -239,9 +242,7 @@ class _AllNotesState extends State<AllNotes> {
                                       width: MediaQuery.of(context).size.width / 2,
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(10),
-                                          color: items[index].noteStatus == 1
-                                              ? Colors.deepPurple.withOpacity(.6)
-                                              : Colors.green,
+                                          color: controller.darkLight?Colors.black:Colors.deepPurple.withOpacity(.6),
                                           boxShadow: const [
                                             BoxShadow(blurRadius: 1, color: Colors.grey)
                                           ]),

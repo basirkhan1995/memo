@@ -4,10 +4,16 @@ import 'package:memoapp/Screens/custom_drawer.dart';
 import 'package:memoapp/Screens/Transactions/all_transaction.dart';
 import 'package:memoapp/Screens/tasks.dart';
 import 'package:memoapp/Screens/settings.dart';
+import 'package:provider/provider.dart';
+import 'Provider/provider.dart';
 import 'Screens/Notes/notes.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main(){
   WidgetsFlutterBinding.ensureInitialized();
+  //sqfliteFfiInit();
+
+  //databaseFactory = databaseFactoryFfi;
   Locales.init(['en', 'fa']);
   runApp(const MyApp());
 }
@@ -16,20 +22,35 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return LocaleBuilder(
-      builder: (locale) =>
-         MaterialApp(
-          title: 'Memo App',
-           localizationsDelegates: Locales.delegates,
-           supportedLocales: Locales.supportedLocales,
-           locale: locale,
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-            useMaterial3: true,
-          ),
-          home: const MyHomePage(),
-        )
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => MyProvider(),
+       
+      child: Consumer<MyProvider>(
+        builder: (context, MyProvider notifier,child){
+        final controller = Provider.of<MyProvider>(context, listen: false);
+        return LocaleBuilder(
+          builder: (locale) =>
+             MaterialApp(
+               themeMode: controller.darkLight? ThemeMode.dark: ThemeMode.light,
+               darkTheme: controller.darkLight? ThemeData.dark() : ThemeData.light(),
+
+              title: 'Memo App',
+               localizationsDelegates: Locales.delegates,
+               supportedLocales: Locales.supportedLocales,
+               locale: locale,
+              debugShowCheckedModeBanner: false,
+              theme:
+              ThemeData(
+                appBarTheme: const AppBarTheme(
+                  elevation: 0,
+                ),
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+                useMaterial3: true,
+              ),
+              home: const MyHomePage(),
+            )
+        );},
+      ),
     );
   }
 }
@@ -60,6 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Icons.account_balance,
     Icons.settings
   ];
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;

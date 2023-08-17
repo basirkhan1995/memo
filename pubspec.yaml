@@ -46,6 +46,8 @@ dependencies:
   shamsi_date: ^1.0.1
   pdf: ^3.10.4
   dropdown_search: ^5.0.6
+  sqflite_common_ffi: ^2.3.0
+  searchfield: ^0.8.4
 
 dev_dependencies:
   flutter_test:
