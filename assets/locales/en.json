@@ -40,5 +40,9 @@
   "description": "Description",
   "": "Description",
   "date": "Last time updated",
-  "select_person": "select person"
+  "select_person": "Person",
+  "power": "Power bill",
+  "rent": "Rent",
+  "select_category": "Category",
+  "person_name": "Person name"
 }

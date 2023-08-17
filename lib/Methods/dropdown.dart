@@ -4,6 +4,7 @@ class CustDropDown<T> extends StatefulWidget {
   final List<CustDropdownMenuItem> items;
   final Function onChanged;
   final String hintText;
+  final IconData? icon;
   final double borderRadius;
   final double maxListHeight;
   final double borderWidth;
@@ -14,6 +15,7 @@ class CustDropDown<T> extends StatefulWidget {
       {required this.items,
         required this.onChanged,
         this.hintText = "",
+        this.icon = Icons.arrow_drop_down,
         this.borderRadius = 0,
         this.borderWidth = 1,
         this.maxListHeight = 160,
@@ -217,10 +219,10 @@ class _CustDropDownState extends State<CustDropDown>
                   ),
                 ),
               ),
-              const Flexible(
+               Flexible(
                 flex: 1,
                 child: Icon(
-                  Icons.arrow_drop_down,
+                  widget.icon,color: Colors.black54,
                 ),
               ),
             ],

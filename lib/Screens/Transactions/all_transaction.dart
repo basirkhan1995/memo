@@ -5,6 +5,7 @@ import 'package:memoapp/Screens/Transactions/create_transaction.dart';
 import 'package:memoapp/Screens/Transactions/transaction_details.dart';
 import 'package:memoapp/Screens/Transactions/trn_model.dart';
 
+import '../../Methods/dropdown.dart';
 import '../../sqlite.dart';
 
 
@@ -54,17 +55,18 @@ class _TransactionsState extends State<Transactions> {
     "all",
     "paid",
     "received",
-    "debt",
-    "removed"
+    "power",
+    "rent"
   ];
   var filterData = [
     "%",
     "paid",
     "received",
-    "debt",
-    "removed"
+    "power",
+    "rent"
   ];
   int currentFilterIndex = 0;
+  var trnTypeValue = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -79,54 +81,81 @@ class _TransactionsState extends State<Transactions> {
         child: Column(
           children: [
 
-            //Filter buttons
-            SizedBox(
-              height: 50,
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: filterTitle.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context,index){
-                    return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 0,vertical: 7),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: currentFilterIndex==index? Colors.deepPurple.withOpacity(.1):Colors.transparent,
-                      ),
-                      child: TextButton(
-                          onPressed: (){
-                            setState(() {
-                              currentFilterIndex = index;
-                              transactions = db.getByTransactionType(filterData[currentFilterIndex]);
-                            });
-                          },
-                          child: LocaleText(filterTitle[index])),
-                    );
-                  }),
-            ),
-
             //Search TextField
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10,vertical: 8),
-              padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 3),
-              decoration: BoxDecoration(
-                  color: Colors.deepPurple.withOpacity(.1),
-                  borderRadius: BorderRadius.circular(8)
-              ),
-              child: TextFormField(
-                controller: searchCtrl,
-                onChanged: (value){
-                  setState(() {
-                    keyword = searchCtrl.text;
-                    //transactions = db.searchMemo(keyword);
-                  });
-                },
-                decoration: InputDecoration(
-                    hintText: Locales.string(context,"search"),
-                    icon: const Icon(Icons.search),
-                    border: InputBorder.none
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 10,vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 3),
+                    decoration: BoxDecoration(
+                        color: Colors.deepPurple.withOpacity(.1),
+                        borderRadius: BorderRadius.circular(8)
+                    ),
+                    child: TextFormField(
+                      controller: searchCtrl,
+                      onChanged: (value){
+                        setState(() {
+                          keyword = searchCtrl.text;
+                          transactions = db.transactionSearch(keyword);
+                        });
+                      },
+                      decoration: InputDecoration(
+                          hintText: Locales.string(context,"search"),
+                          icon: const Icon(Icons.search),
+                          border: InputBorder.none
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                Expanded(
+                  child: Container(
+                    height: 52,
+                    margin: const EdgeInsets.symmetric(horizontal: 10,vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8,vertical: 3),
+                    decoration: BoxDecoration(
+                        color: Colors.deepPurple.withOpacity(.1),
+                        borderRadius: BorderRadius.circular(8)
+                    ),
+                    child:  CustDropDown(
+                      maxListHeight: 200,
+                      icon: Icons.filter_alt_rounded,
+                      items: const [
+                        CustDropdownMenuItem(
+                          value: 0,
+                          child: LocaleText("all"),
+                        ),
+                        CustDropdownMenuItem(
+                          value: 1,
+                          child: LocaleText("paid"),
+                        ),
+                        CustDropdownMenuItem(
+                          value: 2,
+                          child: LocaleText("received"),
+                        ),
+                        CustDropdownMenuItem(
+                          value: 3,
+                          child: LocaleText("power"),
+                        ),
+                        CustDropdownMenuItem(
+                          value: 4,
+                          child: LocaleText("rent"),
+                        ),
+                      ],
+                      hintText: Locales.string(context, "category"),
+                      borderRadius: 5,
+                      onChanged: (val) {
+                        setState(() {
+                          trnTypeValue = val;
+                          currentFilterIndex = val;
+                          transactions = db.filterTransactions(filterData[currentFilterIndex]);
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ],
             ),
 
             Expanded(
@@ -146,14 +175,14 @@ class _TransactionsState extends State<Transactions> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Image.asset("assets/Photos/empty.png",width: 250),
-                            // MaterialButton(
-                            //   shape: RoundedRectangleBorder(
-                            //       borderRadius: BorderRadius.circular(4)),
-                            //   minWidth: 100,
-                            //   color: Theme.of(context).colorScheme.inversePrimary,
-                            //   onPressed: () => _onRefresh(),
-                            //   child: const LocaleText("refresh"),
-                            // )
+                            MaterialButton(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4)),
+                              minWidth: 160,
+                              color: Theme.of(context).colorScheme.inversePrimary,
+                              onPressed: () => _onRefresh(),
+                              child: const LocaleText("refresh"),
+                            )
                           ],
                         ));
                   } else if (snapshot.hasError) {
@@ -245,7 +274,7 @@ class _TransactionsState extends State<Transactions> {
                                       children: [
                                         ListTile(
                                           title: Text(
-                                            items[index].person.toString(),
+                                            items[index].person.toString()??"",
                                             style: const TextStyle(
                                                 color: Colors.white, fontSize: 20),
                                           ),
@@ -261,9 +290,12 @@ class _TransactionsState extends State<Transactions> {
                                                   color: Colors.deepPurple, fontSize: 14),
                                             ),
                                           ),
-                                          contentPadding: EdgeInsets.symmetric(horizontal: 6,vertical: 0),
+                                          contentPadding: const EdgeInsets.symmetric(horizontal: 6,vertical: 0),
                                           dense: true,
-                                          visualDensity: VisualDensity(vertical: -4),
+                                          visualDensity: const VisualDensity(vertical: -4),
+                                          onTap: (){
+                                            print("Helloo ${items[index].person.toString()}" );
+                                          },
                                         ),
                                         Flexible(
                                             child: Container(

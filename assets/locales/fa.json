@@ -40,5 +40,9 @@
   "description": "جزئیات",
   "": "شرح",
   "date": "آخرین تغییر",
-  "select_person": "شخص"
+  "select_person": "شخص",
+  "power": "بل برق",
+  "rent": "کرایه",
+  "select_category": "بخش",
+  "person_name": "نام و نام خانوادگی"
 }

@@ -7,7 +7,7 @@ import 'package:memoapp/Screens/settings.dart';
 import 'package:provider/provider.dart';
 import 'Provider/provider.dart';
 import 'Screens/Notes/notes.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
 
 void main(){
   WidgetsFlutterBinding.ensureInitialized();
@@ -88,51 +88,53 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       drawer: const CustomDrawer(),
       bottomNavigationBar: Container(
+        width: screenWidth *.96,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Theme.of(context).colorScheme.inversePrimary.withOpacity(.25),
         ),
         margin: const EdgeInsets.all(8),
-        width: MediaQuery.of(context).size.width *.9,
         height: 80,
         child: Center(
-          child: ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth *.024),
-            scrollDirection: Axis.horizontal,
-             itemCount: items.length,
-              shrinkWrap: true,
-              itemBuilder: (context,index)=> InkWell(
-                onTap: (){
-                  setState(() {
-                    currentIndex = index;
-                  });
-                },
-                child: Container(
-                  width: 90,
-                  margin: const EdgeInsets.symmetric(horizontal: 0,vertical: 6),
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: currentIndex == index? Colors.deepPurple.withOpacity(.6):Colors.transparent,
-                  ),
-                  child: SizedBox(
-                    child: Center(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                           Icon(icons[index],
-                               color: currentIndex==index?Colors.white:Colors.black45,
-                               size: currentIndex == index?26:22,
-                           ),
-                           LocaleText(items[index],
-                             style: TextStyle(color: currentIndex==index?Colors.white:Colors.black45,fontWeight: currentIndex == index? FontWeight.bold:FontWeight.normal),)
-                        ],
+          child: Expanded(
+            child: ListView.builder(
+              //padding: EdgeInsets.symmetric(horizontal: screenWidth *.024),
+              scrollDirection: Axis.horizontal,
+               itemCount: items.length,
+                shrinkWrap: true,
+                itemBuilder: (context,index)=> InkWell(
+                  onTap: (){
+                    setState(() {
+                      currentIndex = index;
+                    });
+                  },
+                  child: Container(
+                    width: 90,
+                    margin: const EdgeInsets.symmetric(horizontal: 0,vertical: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: currentIndex == index? Colors.deepPurple.withOpacity(.6):Colors.transparent,
+                    ),
+                    child: SizedBox(
+                      child: Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                             Icon(icons[index],
+                                 color: currentIndex==index?Colors.white:Colors.black45,
+                                 size: currentIndex == index?26:22,
+                             ),
+                             LocaleText(items[index],
+                               style: TextStyle(color: currentIndex==index?Colors.white:Colors.black45,fontWeight: currentIndex == index? FontWeight.bold:FontWeight.normal),)
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              )
+                )
+            ),
           ),
         )
       ),
