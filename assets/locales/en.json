@@ -44,5 +44,6 @@
   "power": "Power bill",
   "rent": "Rent",
   "select_category": "Category",
-  "person_name": "Person name"
+  "person_name": "Person name",
+  "category_name": "Category name"
 }
